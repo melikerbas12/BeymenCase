@@ -1,4 +1,3 @@
-using SahaBT.Retro.Core.Models;
 
 namespace BeymenCase.Core.Models.DataModels
 {
