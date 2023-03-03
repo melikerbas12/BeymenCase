@@ -1,5 +1,9 @@
+using System.Reflection;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using SahaBT.Retro.Core.Utilities;
 
 namespace BeymenCase.Service
 {
@@ -10,7 +14,7 @@ namespace BeymenCase.Service
         {
             services.AddControllers(opt =>
             {
-                // opt.Filters.Add(new DefaultResponseAttribute());
+                opt.Filters.Add(new DefaultResponseAttribute());
                 // opt.Filters.Add(new LogAttribute());
             })
             .AddNewtonsoftJson(options =>
@@ -18,7 +22,7 @@ namespace BeymenCase.Service
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
-
+            
             #region Mapper Settings
             // services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 

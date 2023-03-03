@@ -5,7 +5,7 @@ using BeymenCase.Core.Utilities.Exceptions;
 using BeymenCase.Core.Utilities.Validations;
 using FluentValidation;
 
-namespace SahaBT.Retro.Core.Utilities
+namespace BeymenCase.Core.Utilities
 {
     public class FluentValidate : ActionFilterAttribute
     {

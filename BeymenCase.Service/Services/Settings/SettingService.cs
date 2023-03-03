@@ -18,7 +18,7 @@ namespace BeymenCase.Service.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<BoolRef> Delete(int id)
+        public async Task<BoolRef> Delete(int id, CancellationToken cancellationToken)
         {
             var entity = await _unitOfWork.SettingRepository.GetByIdAsync(id);
 
@@ -29,12 +29,12 @@ namespace BeymenCase.Service.Services
 
             _unitOfWork.SettingRepository.SoftRemove(entity);
             _unitOfWork.SettingRepository.Update(entity);
-            await _unitOfWork.Complete();
+            await _unitOfWork.Complete(cancellationToken);
 
             return true;
         }
 
-        public async Task<SettingDto> GetById(int id)
+        public async Task<SettingDto> GetById(int id, CancellationToken cancellationToken)
         {
             var entity = await _unitOfWork.SettingRepository.GetByIdAsync(id);
 
@@ -50,17 +50,17 @@ namespace BeymenCase.Service.Services
             return entities.Contract();
         }
 
-        public async Task<BoolRef> Insert(SettingCreateDto model)
+        public async Task<BoolRef> Create(SettingCreateDto model,CancellationToken cancellationToken)
         {
             var entity = model.Contract();
 
             await _unitOfWork.SettingRepository.AddAsync(entity);
-            await _unitOfWork.Complete();
+            await _unitOfWork.Complete(cancellationToken);
 
             return true;
         }
 
-        public async Task<BoolRef> Update(SettingUpdateDto model)
+        public async Task<BoolRef> Update(SettingUpdateDto model, CancellationToken cancellationToken)
         {
             var entity = await _unitOfWork.SettingRepository.GetByIdAsync(model.Id);
 
@@ -71,7 +71,7 @@ namespace BeymenCase.Service.Services
             setting.ModifiedDate = DateTime.Now;
 
             _unitOfWork.SettingRepository.Update(setting);
-            await _unitOfWork.Complete();
+            await _unitOfWork.Complete(cancellationToken);
 
             return true;
         }

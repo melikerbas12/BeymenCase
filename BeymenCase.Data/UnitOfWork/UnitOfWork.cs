@@ -16,9 +16,9 @@ namespace SahaBT.Retro.Data.UnitOfWork
             this.SettingRepository = SettingRepository;
 
         }
-        public async Task<int> Complete()
+        public async Task<int> Complete(CancellationToken cancellationToken)
         {
-            return await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync(cancellationToken);
         }
         public void Dispose()
         {

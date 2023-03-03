@@ -1,9 +1,9 @@
 using BeymenCase.Core.Models;
 using BeymenCase.Core.Models.Dtos.Setting;
+using BeymenCase.Core.Utilities;
+using BeymenCase.Core.Validations;
 using BeymenCase.Service.Services;
 using Microsoft.AspNetCore.Mvc;
-using SahaBT.Retro.Core.Utilities;
-using SahaBT.Retro.Core.Validations.Agreements;
 
 namespace BeymenCase.WebAPI.Controllers;
 
@@ -30,10 +30,10 @@ public class SettingController : BaseController
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(BaseResponse<SettingDto>), 200)]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Get(int id, CancellationToken cancellationToken)
     {
 
-        var response = await _settingService.GetById(id);
+        var response = await _settingService.GetById(id, cancellationToken);
         return Ok(response);
 
     }
@@ -41,10 +41,10 @@ public class SettingController : BaseController
     [FluentValidate(typeof(SettingCreateDtoValidation))]
     [HttpPost]
     [ProducesResponseType(typeof(BaseResponse<BoolRef>), 200)]
-    public async Task<IActionResult> Post(SettingCreateDto model)
+    public async Task<IActionResult> Post(SettingCreateDto model, CancellationToken cancellationToken)
     {
 
-        var response = await _settingService.Insert(model);
+        var response = await _settingService.Create(model, cancellationToken);
         return Ok(response);
 
     }
@@ -52,20 +52,20 @@ public class SettingController : BaseController
     [FluentValidate(typeof(SettingUpdateDtoValidation))]
     [HttpPut]
     [ProducesResponseType(typeof(BaseResponse<BoolRef>), 200)]
-    public async Task<IActionResult> Put(SettingUpdateDto model)
+    public async Task<IActionResult> Put(SettingUpdateDto model, CancellationToken cancellationToken)
     {
 
-        var response = await _settingService.Update(model);
+        var response = await _settingService.Update(model, cancellationToken);
         return Ok(response);
 
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(BaseResponse<BoolRef>), 200)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
 
-        var response = await _settingService.Delete(id);
+        var response = await _settingService.Delete(id, cancellationToken);
         return Ok(response);
 
     }

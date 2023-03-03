@@ -13,17 +13,19 @@ namespace BeymenCase.Data.Repositories
         {
         }
 
-        public Task<Setting> GetById(int id)
+        public async Task<Setting> GetByIdAsync(int id,CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _context.Settings
+            .AsNoTracking()
+            .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
         }
 
         public async Task<PagedResult<Setting>> GetSettings(int page, int pageSize, string name, string type, string value)
         {
-             return await _context.Settings
-                .AsNoTracking()
-                .Search(name, type, value)
-                .GetPaged(page, pageSize);
+            return await _context.Settings
+               .AsNoTracking()
+               .Search(name, type, value)
+               .GetPaged(page, pageSize);
         }
     }
 }

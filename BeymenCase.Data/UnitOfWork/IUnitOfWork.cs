@@ -8,6 +8,6 @@ namespace BeymenCase.Data.UnitOfWork
     public interface IUnitOfWork : IDisposable
     {
         ISettingRepository SettingRepository { get; }
-        Task<int> Complete();
+        Task<int> Complete(CancellationToken cancellationToken);
     }
 }

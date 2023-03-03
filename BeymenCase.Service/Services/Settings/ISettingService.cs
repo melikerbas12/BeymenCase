@@ -8,9 +8,9 @@ namespace BeymenCase.Service.Services
     {
 
         Task<PagedResult<SettingDto>> GetSettings(int page, int pageSize, string name, string type, string value);
-        Task<SettingDto> GetById(int id);
-        Task<BoolRef> Insert(SettingCreateDto model);
-        Task<BoolRef> Update(SettingUpdateDto model);
-        Task<BoolRef> Delete(int id);
+        Task<SettingDto> GetById(int id, CancellationToken cancellationToken);
+        Task<BoolRef> Create(SettingCreateDto model, CancellationToken cancellationToken);
+        Task<BoolRef> Update(SettingUpdateDto model, CancellationToken cancellationToken);
+        Task<BoolRef> Delete(int id, CancellationToken cancellationToken);
     }
 }

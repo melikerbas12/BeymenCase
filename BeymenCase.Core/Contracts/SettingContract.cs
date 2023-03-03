@@ -29,11 +29,6 @@ namespace BeymenCase.Core.Contracts
             var config = SettingConfig();
             return source.Adapt<Setting>(config);
         }
-        public static Setting Contract(this SettingDetailDto source)
-        {
-            var config = SettingConfig();
-            return source.Adapt<Setting>(config);
-        }
 
         public static Setting Contract(this SettingCreateDto source)
         {

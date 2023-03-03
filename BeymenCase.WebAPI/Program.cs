@@ -1,16 +1,15 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BeymenCase.Data.Context;
+using BeymenCase.Service;
 using BeymenCase.Service.DependencyResolvers.Autofac;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddDbContext<BeymenCaseDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgreConnection")));
-
+builder.Services.AddServices();
 #region Swagger Settings
 builder.Services.AddSwaggerGen(c =>
 {
@@ -38,20 +37,29 @@ builder.Services.AddSwaggerGen(c =>
 });
 #endregion
 
+#region Autofac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
+#endregion
 
+builder.Services.AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssemblyContaining<Program>();
+                fv.ImplicitlyValidateChildProperties = true;
+            });
+
+#region Db Connection
+builder.Services.AddDbContext<BeymenCaseDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgreConnection")));
 var app = builder.Build();
 using var scope = app.Services.CreateAsyncScope();
 var beymenCaseDbContext = scope.ServiceProvider.GetRequiredService<BeymenCaseDbContext>();
 beymenCaseDbContext.Database.MigrateAsync();
+#endregion
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 app.UseSwagger();
@@ -63,6 +71,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
