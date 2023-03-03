@@ -1,6 +1,6 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using BeymenCase.Core.Utilities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using BeymenCase.Data.Context;
 using BeymenCase.Service;
 using BeymenCase.Service.DependencyResolvers.Autofac;
