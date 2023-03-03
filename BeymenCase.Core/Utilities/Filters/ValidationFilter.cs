@@ -30,7 +30,6 @@ namespace BeymenCase.Core.Utilities
                 }
 
                 context.Result = new BadRequestObjectResult(errorReponse);
-                return;
             }
         }
     }

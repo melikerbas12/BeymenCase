@@ -15,8 +15,4 @@
   <ItemGroup>
     <None Remove="Microsoft.Extensions.Configuration" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Validations\Base\" />
-    <Folder Include="Validations\Settings\" />
-  </ItemGroup>
 </Project>

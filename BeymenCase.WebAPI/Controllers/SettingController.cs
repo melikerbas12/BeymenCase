@@ -40,13 +40,6 @@ public class SettingController : BaseController
         return Ok(response);
     }
 
-    [HttpPost("Person")]
-    [ProducesResponseType(typeof(BaseResponse<BoolRef>), 200)]
-    public async Task<IActionResult> Person(Person person)
-    {
-        return Ok("test");
-    }
-
     [HttpPut]
     [ProducesResponseType(typeof(BaseResponse<BoolRef>), 200)]
     public async Task<IActionResult> Put(SettingUpdateDto model, CancellationToken cancellationToken)

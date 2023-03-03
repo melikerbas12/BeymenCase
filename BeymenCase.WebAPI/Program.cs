@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using BeymenCase.Core.Utilities;
 using BeymenCase.Data.Context;
 using BeymenCase.Service;
-using BeymenCase.Service.DependencyResolvers.Autofac;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,15 +9,9 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddServices();
+builder.Services.AddServices(builder.Configuration);
 
-builder.Services.AddControllers(opt =>
-{
-    opt.Filters.Add<ValidationFilter>();
-}).ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
 
-builder.Services.AddFluentValidationAutoValidation()
-   .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 #region Swagger Settings
 
@@ -50,13 +41,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 #endregion Swagger Settings
-
-#region Autofac
-
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
-
-#endregion Autofac
 
 #region Db Connection
 
