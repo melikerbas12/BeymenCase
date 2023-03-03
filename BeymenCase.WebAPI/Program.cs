@@ -1,14 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using BeymenCase.Data.Context;
 using BeymenCase.Service;
-using BeymenCase.Service.DependencyResolvers.Autofac;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddServices();
+builder.Services.AddServices(builder.Configuration);
 #region Swagger Settings
 builder.Services.AddSwaggerGen(c =>
 {
@@ -35,12 +32,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 #endregion
-
-#region Autofac
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
-#endregion
-
 
 #region Db Connection
 builder.Services.AddDbContext<BeymenCaseDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgreConnection")));
