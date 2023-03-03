@@ -1,15 +1,29 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using BeymenCase.Core.Utilities;
 using BeymenCase.Data.Context;
 using BeymenCase.Service;
 using BeymenCase.Service.DependencyResolvers.Autofac;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddServices();
+
+builder.Services.AddControllers(opt =>
+{
+    opt.Filters.Add<ValidationFilter>();
+}).ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
+
+builder.Services.AddFluentValidationAutoValidation()
+   .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
 #region Swagger Settings
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "SAHABT.Retro.WebApi", Version = "v1" });
@@ -34,21 +48,25 @@ builder.Services.AddSwaggerGen(c =>
                     {securityScheme, new string[] { }}
     });
 });
-#endregion
+
+#endregion Swagger Settings
 
 #region Autofac
+
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
-#endregion
 
+#endregion Autofac
 
 #region Db Connection
+
 builder.Services.AddDbContext<BeymenCaseDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgreConnection")));
 var app = builder.Build();
 using var scope = app.Services.CreateAsyncScope();
 var beymenCaseDbContext = scope.ServiceProvider.GetRequiredService<BeymenCaseDbContext>();
 beymenCaseDbContext.Database.MigrateAsync();
-#endregion
+
+#endregion Db Connection
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
