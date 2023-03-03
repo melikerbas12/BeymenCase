@@ -4,6 +4,8 @@ using BeymenCase.Core.Models;
 using BeymenCase.Core.Utilities.Exceptions;
 using BeymenCase.Core.Utilities.Validations;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BeymenCase.Core.Utilities
 {
@@ -23,10 +25,17 @@ namespace BeymenCase.Core.Utilities
             var validator = (IValidator)Activator.CreateInstance(_validatorType);
             var entityType = _validatorType.BaseType.GetGenericArguments()[0];
             var entities = context.ActionArguments.Values.Where(t => t.GetType() == entityType);
-            foreach (var entity in entities)
-            {
-                ValidationTool.Validate(validator, entity);
-            }
+
+            var messages = context.ModelState.Values
+            .Where(x => x.ValidationState == ModelValidationState.Invalid)
+            .SelectMany(x => x.Errors)
+            .Select(x => x.ErrorMessage)
+            .ToList();
+            context.Result = new BadRequestObjectResult(messages);
+            // foreach (var entity in entities)
+            // {
+            //     ValidationTool.Validate(validator, entity);
+            // }
         }
     }
 }

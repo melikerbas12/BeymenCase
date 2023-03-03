@@ -1,4 +1,5 @@
 using System.Reflection;
+using BeymenCase.Core.Utilities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,18 +16,21 @@ namespace BeymenCase.Service
             services.AddControllers(opt =>
             {
                 opt.Filters.Add(new DefaultResponseAttribute());
-                // opt.Filters.Add(new LogAttribute());
             })
+            .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true)
+            .AddFluentValidation(options =>
+                {
+                    options.ImplicitlyValidateChildProperties = true;
+                    options.ImplicitlyValidateRootCollectionElements = true;
+                    options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+                })
             .AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
-            
             #region Mapper Settings
-            // services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
-            // TypeAdapterConfig.GlobalSettings.Compiler = exp => exp.CompileFast();
             #endregion
             #region Cors Settings
             services.AddCors(options =>
@@ -38,7 +42,7 @@ namespace BeymenCase.Service
                                         .AllowAnyOrigin()
                                         .AllowAnyHeader()
                                         .AllowAnyMethod();
-                                    //.AllowCredentials();
+                                    // .AllowCredentials();
                                 });
             });
             #endregion
