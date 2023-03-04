@@ -18,9 +18,9 @@ public class SettingController : BaseController
 
     [HttpGet]
     [ProducesResponseType(typeof(BaseResponse<PagedResult<SettingDto>>), 200)]
-    public async Task<IActionResult> GetSettings(int page, int pageSize, string? name, string? type, string? value)
+    public async Task<IActionResult> GetSettings(int page, int pageSize, string applicationName, string? name, string? type, string? value)
     {
-        var response = await _settingService.GetSettings(page, pageSize, name, type, value);
+        var response = await _settingService.GetSettings(page, pageSize,applicationName, name, type, value);
         return Ok(response);
     }
 

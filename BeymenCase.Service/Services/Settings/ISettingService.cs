@@ -7,7 +7,7 @@ namespace BeymenCase.Service.Services
     public interface ISettingService
     {
 
-        Task<PagedResult<SettingDto>> GetSettings(int page, int pageSize, string name, string type, string value);
+        Task<PagedResult<SettingDto>> GetSettings(int page, int pageSize,string applicationName, string? name, string? type, string? value);
         Task<SettingDto> GetById(int id, CancellationToken cancellationToken);
         Task<BoolRef> Create(SettingCreateDto model, CancellationToken cancellationToken);
         Task<BoolRef> Update(SettingUpdateDto model, CancellationToken cancellationToken);

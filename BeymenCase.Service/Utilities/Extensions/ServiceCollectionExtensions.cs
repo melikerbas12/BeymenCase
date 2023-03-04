@@ -59,6 +59,7 @@ namespace BeymenCase.Service
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISettingService, SettingService>();
             services.AddScoped<ISettingRepository, SettingRepository>();
+            // services.AddScoped<IConfigurationReader>();
 
             #endregion Service Life
 

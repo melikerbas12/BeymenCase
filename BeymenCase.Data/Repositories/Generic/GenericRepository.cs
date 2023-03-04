@@ -15,9 +15,9 @@ namespace BeymenCode.Data.Repositories
         {
             this._context = context;
         }
-        public ValueTask<TEntity> GetByIdAsync(int id)
+        public ValueTask<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            return _context.Set<TEntity>().FindAsync(id);
+            return _context.Set<TEntity>().FindAsync(id, cancellationToken);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()

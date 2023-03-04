@@ -6,7 +6,7 @@ namespace SahaBT.Retro.Data.Repositories
     public interface IGenericRepository<TEntity> where TEntity : class, IEntity, new()
     {
 
-        ValueTask<TEntity> GetByIdAsync(int id);
+        ValueTask<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<PagedResult<TEntity>> GetAllPagedAsync(int page, int pageSize);
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
