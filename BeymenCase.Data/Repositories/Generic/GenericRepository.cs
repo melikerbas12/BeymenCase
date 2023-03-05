@@ -13,12 +13,12 @@ namespace BeymenCode.Data.Repositories
 
         public GenericRepository(BeymenCaseDbContext context)
         {
-            this._context = context;
+            _context = context;
         }
         public IQueryable<TEntity> Table =>  _context.Set<TEntity>().AsQueryable();
-        public ValueTask<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async ValueTask<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            return _context.Set<TEntity>().FindAsync(id, cancellationToken);
+            return await _context.Set<TEntity>().FindAsync(id, cancellationToken);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()

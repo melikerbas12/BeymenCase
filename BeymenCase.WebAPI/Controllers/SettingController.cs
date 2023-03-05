@@ -1,5 +1,6 @@
 using BeymenCase.ConfLib;
 using BeymenCase.Core.Models;
+using BeymenCase.Core.Models.DataModels;
 using BeymenCase.Core.Models.Dtos.Setting;
 using BeymenCase.Service.Services;
 using Microsoft.AspNetCore.Mvc;

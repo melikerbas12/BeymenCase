@@ -19,7 +19,7 @@ namespace BeymenCase.ConfLib
         public ConfigurationReader(string applicationName, string connectionString, int refreshTimerIntervalInMS)
         {
             _context = new ConfigurationDbContext(connectionString);
-            _redisContext = new RedisContext("localhost:6390");
+            _redisContext = new RedisContext("localhost:6379");
             this.applicationName = applicationName;
             this.refreshTimerIntervalInMS = refreshTimerIntervalInMS;
             _tokenSource = new CancellationTokenSource();
@@ -30,13 +30,14 @@ namespace BeymenCase.ConfLib
         public async Task<T> GetValue<T>(string key)
         {
             var prefix = string.Format("{0}:{1}", applicationName, key);
-            var result = await _redisContext.GetAsync<T>(1, prefix);
+            var result = await _redisContext.GetAsync<Setting>(0, prefix);
+
             if (result != null)
-                return result;
+                return (T)Convert.ChangeType(result.Value, typeof(T));
 
             var setting = await _context.Settings.Where(s => s.ApplicationName == applicationName && s.IsActive && s.Name == key).FirstOrDefaultAsync();
 
-            await _redisContext.SaveAsync(1, prefix, setting, null);
+            await _redisContext.SaveAsync(1, prefix, setting.Value, null);
 
             return (T)Convert.ChangeType(setting, typeof(T));
         }

@@ -43,9 +43,9 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDbContext<BeymenCaseDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgreConnection")));
 var app = builder.Build();
-using var scope = app.Services.CreateAsyncScope();
-var beymenCaseDbContext = scope.ServiceProvider.GetRequiredService<BeymenCaseDbContext>();
-beymenCaseDbContext.Database.MigrateAsync();
+//using var scope = app.Services.CreateAsyncScope();
+//var beymenCaseDbContext = scope.ServiceProvider.GetRequiredService<BeymenCaseDbContext>();
+//beymenCaseDbContext.Database.MigrateAsync();
 
 #endregion Db Connection
 
