@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 
-namespace BeymenCase.Service.Redis
+namespace BeymenCase.Core.Redis
 {
     public class RedisContext : IRedisContext
     {
@@ -12,7 +12,8 @@ namespace BeymenCase.Service.Redis
         {
             var options = ConfigurationOptions.Parse(host);
             options.ConnectRetry = 5;
-            options.AllowAdmin = true;
+            options.AbortOnConnectFail = false;
+            // options.AllowAdmin = true;
 
             _connectionMultiplexer = ConnectionMultiplexer.Connect(options);
 

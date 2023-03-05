@@ -1,17 +1,18 @@
+using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using BeymenCase.Core.Redis;
 using BeymenCase.Core.Utilities;
+using BeymenCase.Data.Decorator;
 using BeymenCase.Data.Repositories;
 using BeymenCase.Data.UnitOfWork;
-using BeymenCase.Service.Redis;
 using BeymenCase.Service.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MapsterMapper;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using SahaBT.Retro.Data.UnitOfWork;
-using System.Reflection;
+using BeymenCase.Data.UnitOfWork;
 
-namespace BeymenCase.Service
+namespace BeymenCase.Service.Utilities.Extensions
 {
     public static class ServiceCollectionExtensions
     {
@@ -59,9 +60,12 @@ namespace BeymenCase.Service
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISettingService, SettingService>();
             services.AddScoped<ISettingRepository, SettingRepository>();
-            // services.AddScoped<IConfigurationReader>();
 
             #endregion Service Life
+
+            #region Decorates
+            services.Decorate<ISettingRepository, SettingDecorator>();
+            #endregion
 
             return services;
         }

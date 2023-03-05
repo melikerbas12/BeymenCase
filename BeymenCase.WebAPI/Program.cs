@@ -1,17 +1,14 @@
-using BeymenCase.Core.Utilities;
-using BeymenCase.Data.Context;
-using BeymenCase.Service;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
+using BeymenCase.Data.Context;
+using BeymenCase.Service.Utilities.Extensions;
+using BeymenCase.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddServices(builder.Configuration);
-
-
+builder.Services.AddConfigurationReader("SERVICE-A","User ID=postgres;Password=1;Server=localhost;Port=5432;Database=BeymenCaseDb;Integrated Security=true;Pooling=true;",4000);
+builder.Services.AddConfigureAppsetting(builder.Configuration);
 
 #region Swagger Settings
 

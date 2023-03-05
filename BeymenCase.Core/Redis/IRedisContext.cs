@@ -1,6 +1,6 @@
 ﻿using StackExchange.Redis;
 
-namespace BeymenCase.Service.Redis
+namespace BeymenCase.Core.Redis
 {
     public interface IRedisContext
     {

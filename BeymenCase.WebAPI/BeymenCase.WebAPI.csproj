@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BeymenCase.Core\BeymenCase.Core.csproj" />
     <ProjectReference Include="..\BeymenCase.Service\BeymenCase.Service.csproj" />
+    <ProjectReference Include="..\BeymenCase.ConfLib\BeymenCase.ConfLib.csproj" />
   </ItemGroup>
 
 </Project>

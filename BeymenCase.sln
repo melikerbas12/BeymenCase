@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeymenCase.Service", "Beyme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeymenCase.Core", "BeymenCase.Core\BeymenCase.Core.csproj", "{F8777046-4AC8-4741-B41F-609DFC559F1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeymenCase.ConfLib", "BeymenCase.ConfLib\BeymenCase.ConfLib.csproj", "{CA7085B4-F109-45B3-AE44-191F59C91593}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F8777046-4AC8-4741-B41F-609DFC559F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8777046-4AC8-4741-B41F-609DFC559F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8777046-4AC8-4741-B41F-609DFC559F1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA7085B4-F109-45B3-AE44-191F59C91593}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA7085B4-F109-45B3-AE44-191F59C91593}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA7085B4-F109-45B3-AE44-191F59C91593}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA7085B4-F109-45B3-AE44-191F59C91593}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,7 @@
 using BeymenCase.Data.Context;
 using BeymenCase.Data.Repositories;
-using BeymenCase.Data.UnitOfWork;
-using SahaBT.Retro.Data.Repositories;
 
-namespace SahaBT.Retro.Data.UnitOfWork
+namespace BeymenCase.Data.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
