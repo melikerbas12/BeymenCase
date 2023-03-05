@@ -4,10 +4,12 @@ using Microsoft.OpenApi.Models;
 using BeymenCase.Data.Context;
 using BeymenCase.Service.Utilities.Extensions;
 using BeymenCase.WebAPI.Extensions;
+using Serilog;
+using BeymenCase.Service.Logger;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddServices(builder.Configuration);
-builder.Services.AddConfigurationReader("SERVICE-A","User ID=postgres;Password=1;Server=localhost;Port=5432;Database=BeymenCaseDb;Integrated Security=true;Pooling=true;",4000);
+builder.Services.AddConfigurationReader("Service-A","User ID=postgres;Password=1;Server=localhost;Port=5432;Database=BeymenCaseDb;Integrated Security=true;Pooling=true;",6000);
 builder.Services.AddConfigureAppsetting(builder.Configuration);
 
 #region Swagger Settings
@@ -39,13 +41,21 @@ builder.Services.AddSwaggerGen(c =>
 
 #endregion Swagger Settings
 
+#region Serilog
+builder.Host.UseSerilog((hostContext, services, configuration) => {
+    configuration.WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day);
+    configuration.WriteTo.Console();
+    configuration.WriteTo.Debug(outputTemplate: DateTime.Now.ToString());
+});
+#endregion
+
 #region Db Connection
 
 builder.Services.AddDbContext<BeymenCaseDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("PostgreConnection")));
 var app = builder.Build();
-//using var scope = app.Services.CreateAsyncScope();
-//var beymenCaseDbContext = scope.ServiceProvider.GetRequiredService<BeymenCaseDbContext>();
-//beymenCaseDbContext.Database.MigrateAsync();
+using var scope = app.Services.CreateAsyncScope();
+var beymenCaseDbContext = scope.ServiceProvider.GetRequiredService<BeymenCaseDbContext>();
+beymenCaseDbContext.Database.MigrateAsync();
 
 #endregion Db Connection
 
@@ -64,6 +74,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseExceptionMiddleware();
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.MapControllerRoute(
     name: "default",

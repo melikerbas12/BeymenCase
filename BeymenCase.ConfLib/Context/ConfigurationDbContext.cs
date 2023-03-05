@@ -1,7 +1,7 @@
 using BeymenCase.Core.Models.DataModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace BeymenCase.ConfLib
+namespace BeymenCase.ConfLib.Context
 {
     public class ConfigurationDbContext : DbContext
     {

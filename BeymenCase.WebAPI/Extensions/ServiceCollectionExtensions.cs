@@ -1,4 +1,5 @@
 using BeymenCase.ConfLib;
+using BeymenCase.ConfLib.Services;
 
 namespace BeymenCase.WebAPI.Extensions
 {

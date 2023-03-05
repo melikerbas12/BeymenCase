@@ -1,4 +1,5 @@
-﻿using BeymenCase.Core.Utilities.Settings;
+﻿using BeymenCase.Core.Redis;
+using BeymenCase.Core.Utilities.Settings;
 
 namespace BeymenCase.WebAPI.Extensions
 {
@@ -8,6 +9,16 @@ namespace BeymenCase.WebAPI.Extensions
         {
 
             services.Configure<CacheItemSettings>(configuration.GetSection("CacheItem"));
+            #region Redis
+
+            services.AddSingleton<IRedisContext>(sp =>
+            {
+                var redis = new RedisContext(configuration.GetSection("RedisConfig").Value);
+                redis.Connect();
+                return redis;
+            });
+
+            #endregion Redis
 
             return services;
         }

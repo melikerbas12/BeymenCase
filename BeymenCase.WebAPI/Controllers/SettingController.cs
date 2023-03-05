@@ -1,6 +1,5 @@
-using BeymenCase.ConfLib;
+using BeymenCase.ConfLib.Services;
 using BeymenCase.Core.Models;
-using BeymenCase.Core.Models.DataModels;
 using BeymenCase.Core.Models.Dtos.Setting;
 using BeymenCase.Service.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +12,12 @@ public class SettingController : BaseController
 {
     private readonly ISettingService _settingService;
     private readonly IConfigurationReader _configurationReader;
-    public SettingController(ISettingService settingService,IConfigurationReader configurationReader)
+    private readonly ILogger<SettingController> _logger;
+    public SettingController(ISettingService settingService, IConfigurationReader configurationReader, ILogger<SettingController> logger)
     {
         _settingService = settingService;
         _configurationReader = configurationReader;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -24,6 +25,7 @@ public class SettingController : BaseController
     public async Task<IActionResult> GetSettings(int page, int pageSize, string applicationName, string? name, string? type, string? value)
     {
         var response = await _settingService.GetSettings(page, pageSize, applicationName, name, type, value);
+        _logger.LogInformation("Data : " + response);
         return Ok(response);
     }
 
@@ -40,6 +42,7 @@ public class SettingController : BaseController
     public async Task<IActionResult> Post(SettingCreateDto model, CancellationToken cancellationToken)
     {
         var response = await _settingService.Create(model, cancellationToken);
+        _logger.LogInformation("Added : " + model);
         return Ok(response);
     }
 
@@ -58,11 +61,11 @@ public class SettingController : BaseController
         var response = await _settingService.Delete(id, cancellationToken);
         return Ok(response);
     }
-    [HttpGet("library")]
+    [HttpGet("library/{name}")]
     [ProducesResponseType(typeof(BaseResponse<BoolRef>), 200)]
-    public async Task<IActionResult> Library()
+    public async Task<IActionResult> Library(string name)
     {
-        var response = await _configurationReader.GetValue<string>("SiteName");
+        var response = await _configurationReader.GetValue<string>(name);
         return Ok(response);
     }
 }

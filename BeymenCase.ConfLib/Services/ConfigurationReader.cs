@@ -1,27 +1,32 @@
+
+
+using BeymenCase.ConfLib.Context;
+using BeymenCase.ConfLib.Repositories;
 using BeymenCase.Core.Models.DataModels;
 using BeymenCase.Core.Redis;
-using BeymenCase.Core.Utilities.Settings;
+using Castle.Core.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
-namespace BeymenCase.ConfLib
+namespace BeymenCase.ConfLib.Services
 {
     public class ConfigurationReader : IConfigurationReader
     {
 
         private string applicationName;
         private int refreshTimerIntervalInMS;
-        private readonly ConfigurationDbContext _context;
         private readonly IConfiguration Configuration;
         private readonly IRedisContext _redisContext;
+        private readonly IConfigurationRepository _configurationRepository;
         private readonly CancellationTokenSource _tokenSource;
 
         public ConfigurationReader(string applicationName, string connectionString, int refreshTimerIntervalInMS)
         {
-            _context = new ConfigurationDbContext(connectionString);
-            _redisContext = new RedisContext("localhost:6379");
             this.applicationName = applicationName;
             this.refreshTimerIntervalInMS = refreshTimerIntervalInMS;
+
+            _redisContext = new RedisContext("localhost:6379");
+            _configurationRepository = new ConfigurationRepository(connectionString);
+
             _tokenSource = new CancellationTokenSource();
             CancellationToken ct = _tokenSource.Token;
             Task.Run(() => RefreshConfig(this.refreshTimerIntervalInMS), ct);
@@ -30,16 +35,16 @@ namespace BeymenCase.ConfLib
         public async Task<T> GetValue<T>(string key)
         {
             var prefix = string.Format("{0}:{1}", applicationName, key);
-            var result = await _redisContext.GetAsync<Setting>(0, prefix);
+            var result = await _redisContext.GetAsync<Setting>(1, prefix);
 
             if (result != null)
                 return (T)Convert.ChangeType(result.Value, typeof(T));
 
-            var setting = await _context.Settings.Where(s => s.ApplicationName == applicationName && s.IsActive && s.Name == key).FirstOrDefaultAsync();
+            var setting = await _configurationRepository.GetByApplicationName(applicationName,key);
 
             await _redisContext.SaveAsync(1, prefix, setting.Value, null);
 
-            return (T)Convert.ChangeType(setting, typeof(T));
+            return (T)Convert.ChangeType(setting.Value, typeof(T));
         }
 
         private async Task RefreshConfig(int refreshTimerIntervalInMS)
@@ -51,7 +56,7 @@ namespace BeymenCase.ConfLib
             do
             {
                 Thread.Sleep(refreshTimerIntervalInMS);
-                var list = await _context.Settings.Where(s => s.ApplicationName == applicationName && s.IsActive).ToListAsync();
+                var list = await _configurationRepository.Get(applicationName);
                 foreach (var item in list)
                 {
                     var prefix = string.Format("{0}:{1}", item.ApplicationName, item.Name);

@@ -69,18 +69,7 @@ namespace BeymenCase.Data.Decorator
 
         public async Task<PagedResult<Setting>> GetSettings(int page, int pageSize, string applicationName, string? name, string? type, string? value)
         {
-            var prefix = string.Format("{0}:{1}", applicationName, name);
-            var result = await _redisContext.GetAsync<IList<Setting>>(_cacheItemSetting.Db, prefix);
-
-            if (result != null)
-                return await result.AsQueryable().GetPaged(page, pageSize);
-
-            var settings = await _settingRepository.GetSettings(page, pageSize, applicationName, name, type, value);
-
-            await _redisContext
-                .SaveAsync(_cacheItemSetting.Db, prefix, settings, null);
-
-            return settings;
+            return await _settingRepository.GetSettings(page, pageSize, applicationName, name, type, value);
         }
         public async Task<Setting> AddAsync(Setting entity)
         {

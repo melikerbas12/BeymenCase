@@ -4,7 +4,7 @@ using BeymenCase.Core.Models.Dtos.Setting;
 
 using Mapster;
 
-namespace BeymenCase.Core.Contracts
+namespace BeymenCase.Service.Contracts
 {
     public static class SettingContract
     {

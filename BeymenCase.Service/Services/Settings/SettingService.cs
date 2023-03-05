@@ -1,10 +1,10 @@
-using BeymenCase.Core.Contracts;
 using BeymenCase.Core.Keys;
 using BeymenCase.Core.Models;
 using BeymenCase.Core.Models.DataModels;
 using BeymenCase.Core.Models.Dtos.Setting;
 using BeymenCase.Core.Utilities.Exceptions;
 using BeymenCase.Data.UnitOfWork;
+using BeymenCase.Service.Contracts;
 using BeymenCase.Service.Utilities.Helpers;
 
 namespace BeymenCase.Service.Services

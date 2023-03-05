@@ -43,17 +43,6 @@ namespace BeymenCase.Service.Utilities.Extensions
 
             #endregion Cors Settings
 
-            #region Redis
-
-            services.AddSingleton<IRedisContext>(sp =>
-            {
-                var redis = new RedisContext(configuration.GetSection("RedisConfig").Value);
-                redis.Connect();
-                return redis;
-            });
-
-            #endregion Redis
-
             #region Service Life
 
             services.AddSingleton<IMapper, Mapper>();

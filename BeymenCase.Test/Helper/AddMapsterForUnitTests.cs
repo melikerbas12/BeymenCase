@@ -1,4 +1,5 @@
-using BeymenCase.Core.Contracts;
+
+using BeymenCase.Service.Contracts;
 using Mapster;
 using MapsterMapper;
 
