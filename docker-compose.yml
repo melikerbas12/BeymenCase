@@ -1,0 +1,38 @@
+version: "3.8"
+services:
+  redisdb:
+    image: redis
+    container_name: beymenredis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - beymenconfig
+  postgredb:
+    image: postgres
+    container_name: beymenpostgre
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=Password12*
+      - POSTGRES_DB=postgredb
+    networks:
+      - beymenconfig
+  web.api:
+    image: web.api
+    build:
+      context: .
+      dockerfile: BeymenCase.WebAPI/Dockerfile
+    container_name: web.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Dev
+    ports:
+      - "7780:80"
+    networks:
+      - beymenconfig
+networks:
+  beymenconfig:
+    driver: bridge
+# C:\Users\Bayram\Desktop\Boilerplate\BeymenCase\BeymenCase.WebAPI\Dockerfile
