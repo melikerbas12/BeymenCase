@@ -16,7 +16,7 @@ namespace BeymenCase.ConfLib.Repositories
         {
             return await _context.Settings.
                           Where(s => s.ApplicationName == applicationName && s.IsActive && s.Name == key)
-                          .FirstOrDefaultAsync();
+                         .FirstOrDefaultAsync();
         }
 
         public async Task<IList<Setting>> Get(string applicationName)

@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  redisdb:
+    container_name: beymenredis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - beymennet
+  postgredb:
+    container_name: beymendb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - identitydb_volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1
+      - POSTGRES_DB=postgredb
+    networks:
+      - beymennet
+  beymencase.api:
+    container_name: beymencase.api
+    depends_on:
+      - beymencase.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Dev
+    ports:
+      - "5000:80"
+    networks:
+      - beymennet
+networks:
+  beymennet:
+    driver: bridge

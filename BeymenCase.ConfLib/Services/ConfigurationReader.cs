@@ -40,9 +40,9 @@ namespace BeymenCase.ConfLib.Services
             if (result != null)
                 return (T)Convert.ChangeType(result.Value, typeof(T));
 
-            var setting = await _configurationRepository.GetByApplicationName(applicationName,key);
+            var setting = await _configurationRepository.GetByApplicationName(applicationName, key);
 
-            await _redisContext.SaveAsync(1, prefix, setting.Value, null);
+            await _redisContext.SaveAsync(1, prefix, setting, null);
 
             return (T)Convert.ChangeType(setting.Value, typeof(T));
         }
@@ -61,8 +61,19 @@ namespace BeymenCase.ConfLib.Services
                 {
                     var prefix = string.Format("{0}:{1}", item.ApplicationName, item.Name);
                     var result = await _redisContext.GetAsync<Setting>(1, prefix);
+                    if (result == null && item.IsActive)
+                    {
+                        await _redisContext.SaveAsync(1, prefix, item, null);
+                        return;
+                    }
 
-                    if (result == null || result.Value != item.Value || result.Type != item.Type || result.IsActive != item.IsActive)
+                    if (result.IsActive != item.IsActive)
+                    {
+                        await _redisContext.RemoveAsync(1, prefix);
+                        return;
+                    }
+
+                    if (result == null || result.Value != item.Value || result.Type != item.Type)
                         await _redisContext.SaveAsync(1, prefix, item, null);
 
                 }

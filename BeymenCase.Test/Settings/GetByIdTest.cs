@@ -1,5 +1,4 @@
-using BeymenCase.Core.Models;
-using BeymenCase.Core.Models.DataModels;
+using BeymenCase.Core.Utilities.Exceptions;
 using BeymenCase.Data.UnitOfWork;
 using BeymenCase.Service.Services;
 using BeymenCase.Test.FakerData;
@@ -9,7 +8,7 @@ using Moq;
 
 namespace BeymenCase.Test.Settings
 {
-    public class CreateTest
+    public class GetByIdTest
     {
         private readonly SettingService _settingService;
         private readonly Mock<ISettingService> _settingServiceMock;
@@ -17,7 +16,7 @@ namespace BeymenCase.Test.Settings
         private readonly FakerSetting _fakerSetting;
         private readonly IMapper _mapper;
 
-        public CreateTest()
+        public GetByIdTest()
         {
             var mapper = AddMapsterForUnitTests.GetMapper();
             _fakerSetting = new FakerSetting();
@@ -25,23 +24,16 @@ namespace BeymenCase.Test.Settings
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _settingService = new SettingService(_unitOfWorkMock.Object);
         }
-
+        
         [Fact]
-        public async Task Should_BoolRef_When_AddAsyncSuccess()
+        public async Task Should_NotFoundException_When_SettingIsNull()
         {
-            var settingCreateDto = _fakerSetting.CreateDto;
-            var setting = _fakerSetting.Setting;
 
-            _unitOfWorkMock.Setup(_unitOfWork => _unitOfWork.SettingRepository.AddAsync(It.IsAny<Setting>()))
-                      .ReturnsAsync(() => setting);
+            _unitOfWorkMock.Setup(_unitOfWork => _unitOfWork.SettingRepository.GetByIdAsync(It.IsAny<int>(), default))
+                      .ReturnsAsync(() => null);
 
-            _unitOfWorkMock.Setup(_unitOfWork => _unitOfWork.Complete(default))
-            .ReturnsAsync(() => 1);
-
-            var result = await _settingService.Create(settingCreateDto, default);
-
-            Assert.NotNull(result);
-            Assert.IsType<BoolRef>(result);
+            await Assert.ThrowsAsync<NotFoundException>(async () => await
+                 _settingService.Delete(It.IsAny<int>(), default));
         }
     }
 }
