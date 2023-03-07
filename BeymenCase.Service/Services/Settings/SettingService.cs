@@ -22,7 +22,7 @@ namespace BeymenCase.Service.Services
             if (entity == null)
                 throw new NotFoundException(ResponseCode.DatabaseException, ErrorMessageKey.SettingNotFound);
 
-            entity.ModifiedDate = DateTime.Now;
+            entity.ModifiedDate = DateTime.Now.ToUniversalTime();
 
             _unitOfWork.SettingRepository.SoftRemove(entity);
             _unitOfWork.SettingRepository.Update(entity);
@@ -71,7 +71,7 @@ namespace BeymenCase.Service.Services
             entity.Value = model.Value;
             entity.ApplicationName = model.ApplicationName;
             entity.IsActive = model.IsActive;
-            entity.ModifiedDate = DateTime.Now;
+            entity.ModifiedDate = DateTime.Now.ToUniversalTime();
 
             _unitOfWork.SettingRepository.Update(entity);
             await _unitOfWork.Complete(cancellationToken);
