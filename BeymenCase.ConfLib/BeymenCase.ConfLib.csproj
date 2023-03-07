@@ -2,13 +2,36 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile></PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageIconUrl />
+    <PackageId>ConfigurationReaderLibrary</PackageId>
+    <Authors>Melike Erbaş</Authors>
+    <Company>Experilabs</Company>
+    <Description>This package is a configuration library. Configuration records are available for the respective project.</Description>
+    <PackageProjectUrl>https://github.com/melikerbas12</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/melikerbas12</RepositoryUrl>
+    <PackageTags>Configuration;ConfigurationReader;</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BeymenCase.Core\BeymenCase.Core.csproj"/>
-    <ProjectReference Include="..\BeymenCase.Service\BeymenCase.Service.csproj"/>
+    <None Remove="license\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3"/>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3"/>
+    <None Include="licence\LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BeymenCase.Core\BeymenCase.Core.csproj" />
+    <ProjectReference Include="..\BeymenCase.Service\BeymenCase.Service.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="license\" />
   </ItemGroup>
 </Project>
